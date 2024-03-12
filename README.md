@@ -56,7 +56,7 @@ model.summary()
 ```
 ---
 ## การสร้างโมเดล
-![model_Stucture](model_structure.png)
+![model_Stucture](/image_to_readme/model_structure.png)
 ---
 ## การโหลดข้อมูล
 
@@ -79,7 +79,7 @@ model_training_history = model.fit(X_train, y_train, batch_size=32, epochs=50 , 
 ---
 ## การวัดประสิทธิภาพโมเดล
 
-![img_ef](img_ef.png)
+![img_ef](/image_to_readme/img_ef.png)
 
 ---
 
