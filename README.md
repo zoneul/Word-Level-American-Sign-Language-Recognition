@@ -17,36 +17,10 @@
 ---
 ## การดึงข้อมูล
 ```
-from tensorflow.keras.models  import Sequential
-from tensorflow.keras.layers import Dense, Flatten, Dropout
-from tensorflow.keras.optimizers.schedules import ExponentialDecay
-from tensorflow.keras.optimizers import Adam
-from keras.callbacks import EarlyStopping
-
-model = Sequential()
-model.add(Dense(512, input_shape=X.shape[1:], activation='relu'))
-model.add(Dropout(rate=0.5))
-model.add(Dense(256, activation='relu'))
-model.add(Dropout(rate=0.5))
-model.add(Dense(128, activation='relu'))
-model.add(Dropout(rate=0.5))
-model.add(Flatten())
-model.add(Dense(len(word_index), activation='softmax'))
-
-initial_learning_rate = 0.001
-lr_schedule = ExponentialDecay(initial_learning_rate, decay_steps=10000, decay_rate=0.9)
-early_stopping = EarlyStopping(
-    monitor='loss',  # Metric to monitor for early stopping
-    mode='min',  # Set mode to 'min' for minimizing the metric
-    patience=15,  # Number of epochs with no improvement before stopping
-    restore_best_weights=True,  # Restore the best model weights
-    verbose=1
-)
-
-model.compile(optimizer=Adam(learning_rate=lr_schedule), loss='categorical_crossentropy', metrics=['accuracy'])
-model.summary()
+ดึงข้อมูลจากเว็ปเข้าเครื่องผ่านเว็ปไซต์
+- https://www.kaggle.com/datasets/risangbaskoro/wlasl-processed/data
+- https://paperswithcode.com/dataset/wlasl
 ```
-
 ---
 ## การ preprocess ข้อมูล
 ```
@@ -59,7 +33,38 @@ model.summary()
 ![model_Stucture](/image_to_readme/model_structure.png)
 ---
 ## การโหลดข้อมูล
+```
+co = {}
+try:
+    for i in tqdm(range(len(data)), ncols=100):
+        gloss = data[i]['gloss']
+        if gloss not in co:
+            co[gloss] = 1
+        else:
+            co[gloss] += 1
+        
+        npy_path = os.path.join(npy_dir, f"{gloss}{co[gloss]}.npy")
+        if os.path.exists(npy_path):
+            continue
+        
+        video_path = data[i]['video_path']
+        start = data[i]['frame_start']
+        end = data[i]['frame_end']
+        
+        try:
+            video_landmarks = get_video_landmarks(video_path, start, end)
+            np.save(npy_path, video_landmarks)
+            
+        except Exception as e:
+            print(f"\nError encoding {video_path}\n{e}")
+            continue
+        
+        clear_output(wait=True)
 
+except KeyboardInterrupt:
+    print("\nLoading process interrupted by user.")
+
+```
 ---
 ## การเทรนโมเดล
 ```
@@ -79,7 +84,7 @@ model_training_history = model.fit(X_train, y_train, batch_size=32, epochs=50 , 
 ---
 ## การวัดประสิทธิภาพโมเดล
 
-![img_ef](/image_to_readme/img_ef.png)
+![img_ef](/image_to_readme/Img_ef.png)
 
 ---
 
