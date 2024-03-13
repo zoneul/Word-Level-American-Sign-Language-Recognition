@@ -100,3 +100,11 @@ model_training_history = model.fit(X_train, y_train, batch_size=32, epochs=50 , 
 ![toto_2](/image_to_readme//toto_2.png)
 
 ![Ozone_3](/image_to_readme/Ozone_3.png)
+
+---
+## วิธีการ set up program
+```
+git clone
+open wlsal_recognition.ipynb
+run all cell
+```
